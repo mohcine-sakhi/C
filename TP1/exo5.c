@@ -37,6 +37,8 @@ int sommeDiviseurs(int nombre){
 
     return somme;
 }
+
+
 int amicaux(int a, int b){
     int sommeDiviseursA = sommeDiviseurs(a);
     int sommeDiviseursB = sommeDiviseurs(b);
