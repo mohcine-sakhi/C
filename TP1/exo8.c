@@ -38,7 +38,7 @@ int main(int argc, int *argv[]){
 
     } while ((somme - sommeApprochee <= 0.000000001) || (somme - sommeApprochee >= -0.000000001));
     
-    printf("Une valeur approchee (a 10-6 pres) de la suite est %lf\n", sommeApprochee);
+    printf("Une valeur approchee (a 10-6 pres) de la suite est %lf\n", somme);
 
     return 0;
 }
