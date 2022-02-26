@@ -46,7 +46,7 @@ int main(int argc, int *argv[]){
         scanf("%d", &nombre);
    }while(nombre <= 0);
    
-   if(premier(nombre) == 1){
+   if(premier(nombre)){
        printf("%d est premier.", nombre);
    }else{
        printf("%d n'est pas premier.", nombre);
