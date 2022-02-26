@@ -13,9 +13,9 @@ int main(int argc, int *argv[]){
     do{
         sommeApprochee = somme;
         somme = sommeSuite(rang);
-        printf("%lf\n", sqrt(6 * somme));
         ++rang;
-    }while (somme - sommeApprochee  < 0.0000001 || somme - sommeApprochee > -0.0000001);
+    }while (somme - sommeApprochee  > 0.000001 || somme - sommeApprochee <-0.000001);
+    
 
     printf("une approximation de π (a 10-6 pres) est %lf\n", sqrt(6 * somme));
 

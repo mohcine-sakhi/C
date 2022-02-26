@@ -34,9 +34,7 @@ int main(int argc, int *argv[]){
         sommeApprochee = somme;
         somme += pow(x, terme) / factorielle(terme);
         ++terme;
-        printf("Somme : %lf\n", sommeApprochee);
-
-    } while ((somme - sommeApprochee <= 0.000000001) || (somme - sommeApprochee >= -0.000000001));
+    } while ((somme - sommeApprochee > 0.00001) || (somme - sommeApprochee < -0.00001));
     
     printf("Une valeur approchee (a 10-6 pres) de la suite est %lf\n", somme);
 
