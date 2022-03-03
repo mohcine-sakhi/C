@@ -6,6 +6,7 @@ void afficherTableau(int *tab, int taille);
 int chercherElement(int *tab, int taille, int x);
 void afficherOccurrence(int *tab, int taille, int x);
 void supprimerOccurrence(int *tab, int taille, int *tabSansOccurences, int *taille2, int x);
+int chercherElementDansTableauTrie(int *tab, int taille, int x);
 
 
 int main(int argc, int *argv[]){
@@ -36,6 +37,8 @@ int main(int argc, int *argv[]){
     }else{
         printf("%d ne se trouve pas dans le tableau.\n", elementAChercher);
     }
+
+    printf("%d", chercherElementDansTableauTrie(tab, taille, elementAChercher));
   
     return 0 ;
 }
@@ -80,5 +83,22 @@ void supprimerOccurrence(int *tab, int taille, int *tabSansOccurences, int *tail
             ++(*taille2);
         }
     }
+}
 
+int chercherElementDansTableauTrie(int *tab, int taille, int x){
+    int min = 0;
+    int max = taille;
+    int milieu = 0;
+
+    while (min <= max){
+        milieu = (min + max) / 2;
+        if(tab[milieu] == x){
+            return milieu;
+        }else if(tab[milieu] < x){
+            min = milieu + 1;
+        }else{
+            max = milieu - 1;
+        }
+    }
+    return -1;
 }
