@@ -34,6 +34,8 @@ int main(int argc, int *argv[]){
         printf("Le tableau n'est pas premier.\n");
     }
 
+    free(tab);
+    
     return 0;
 }
 

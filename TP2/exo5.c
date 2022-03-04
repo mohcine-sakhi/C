@@ -40,6 +40,9 @@ int main(int argc, int *argv[]){
 
     printf("%d", chercherElementDansTableauTrie(tab, taille, elementAChercher));
   
+    free(tab);
+    free(tabSansOccurences);
+    
     return 0 ;
 }
 

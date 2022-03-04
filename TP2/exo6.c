@@ -32,6 +32,10 @@ int main(int argc, int *argv[]){
     printf("=======TAB3=======\n");
     afficherTableau(tab3, taille1 + taille2);
 
+    free(tab1);
+    free(tab2);
+    free(tab3);
+
     return 0;
 }
 

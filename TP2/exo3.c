@@ -29,6 +29,8 @@ int main(int argc, int *argv[]){
         }
     }
 
+    free(tab);
+    
     return 0;
 }
 

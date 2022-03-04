@@ -22,6 +22,10 @@ int main(int argc, int *argv[]){
     afficherTableau(tab1, taille);
     printf("Apres elimination des occurences. \n");
     afficherTableau(tab2, taille2);
+
+    free(tab1);
+    free(tab2);
+
     return 0;
 }
 
