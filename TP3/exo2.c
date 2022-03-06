@@ -93,7 +93,7 @@ int main(int argc, int *argv[]){
         afficher(tab, taille);
         break;    
     }
-
+    
     free(tab);
     free(tab2);
 
@@ -213,6 +213,7 @@ void concatener(int *tab1, int taille1, int *tab2, int taille2){
     for(int i = 0; i < taille2; ++i){
         *(tab1 + taille1 + i ) = *(tab2 + i);
     }
+
 }
 
 int menu(){
