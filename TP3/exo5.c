@@ -1,120 +1,152 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "exo5.h"
 
-void lire(int **matrice, int ligne, int colonne);
-void afficher(int **matrice, int ligne, int colonne); 
-void sommeMatrices(int **somme, int **matrice1, int **matrice2, int ligne, int colonne);
 
 int main(int argc, int *argv[]){
-    int ligne = 0;
-    int colonne = 0;
+    int menu = 0;
+    int ligne1 = 0;
+    int colonne1 = 0;
+    int ligne2 = 0;
+    int colonne2 = 0;
+    int x = 0;
     int **matrice1 = NULL;
     int **matrice2 = NULL;
     int **somme = NULL;
+    int **produit = NULL;
 
-    printf("Donner le nombre de lignes de la matrice : ");
-    scanf("%d", &ligne);
-
-    printf("Donner le nombre de colonnes de la matrice : ");
-    scanf("%d", &colonne);
-
-    //L'allocation de la memoire
-    matrice1 = malloc(ligne * sizeof(*matrice1));
-    if(matrice1 == NULL){
-        printf("ERREUR !!!!");
-    }
-
-    for(int i = 0; i < ligne; ++i){
-        matrice1[i] = malloc(colonne * sizeof(**matrice1));
-        if(matrice1[i] == NULL){
-            printf("ERREUR !!!!");
+    do{
+        printf("Choisir l'operation a effectuer : \n");
+        printf(" 1 : Somme de deux matrices\n");
+        printf(" 2 : Produit de deux matrices\n");
+        printf(" 3 : Est ce que la matriced est nulle ?\n");
+        printf(" 4 : Rechercher dans une matrice\n\n");
+        scanf("%d", &menu);
+        if(menu < 0 || menu > 4){
+            printf("Il faut choisir un numero valable !!\n\n");
         }
-    }
+    }while(menu < 0 || menu > 4);
 
-    matrice2 = malloc(ligne * sizeof(*matrice2));
-    if(matrice2 == NULL){
-        printf("ERREUR !!!!");
-    }
+    switch (menu){
+    case 1:
+        printf("Somme de deux matrices\n");
+        printf("Matrice 1\n");
+        lireDimentionsMatrice(&ligne1, &colonne1);
+        printf("Matrice 2\n");
+        lireDimentionsMatrice(&ligne2, &colonne2);
+        if(ligne1 == ligne2 && colonne1 == colonne2){
+        //L'allocation de la memoire
+        matrice1 = allouerMemoire(ligne1, colonne1);
+        matrice2 = allouerMemoire(ligne2, colonne2);
+        somme = allouerMemoire(ligne1, colonne1);
 
-    for(int i = 0; i < ligne; ++i){
-        matrice2[i] = malloc(colonne * sizeof(**matrice2));
-        if(matrice2[i] == NULL){
-            printf("ERREUR !!!!");
+        //Traitement
+        printf("Matrice 1\n");
+        lire(matrice1, ligne1, colonne1);
+
+        printf("Matrice 2\n");
+        lire(matrice2, ligne2, colonne2);
+
+        printf("Matrice 1\n");
+        afficher(matrice1, ligne1, colonne1);
+
+        printf("Matrice 2\n");
+        afficher(matrice2, ligne2, colonne2);
+
+        printf("La somme des deux matrices\n");
+        sommeMatrices(somme, matrice1, matrice2, ligne1, colonne1);
+        afficher(somme, ligne1, colonne1);
+
+        //La liberation de la memoire
+        libererMemoire(matrice1, ligne1);
+        libererMemoire(matrice2, ligne2);
+        libererMemoire(somme, ligne1);
+
+        }else {
+            printf("La somme des deux matrices n'est pas possible\n");
         }
-    }
+        break;
 
-    somme = malloc(ligne * sizeof(*somme));
-    if(somme == NULL){
-        printf("ERREUR !!!!");
-    }
+    case 2:
+        printf("Produit de deux matrices\n");
+        printf("Matrice 1\n");
+        lireDimentionsMatrice(&ligne1, &colonne1);
+        printf("Matrice 2\n");
+        lireDimentionsMatrice(&ligne2, &colonne2);
+        if(colonne1 == ligne2){
+        //L'allocation de la memoire
+        matrice1 = allouerMemoire(ligne1, colonne1);
+        matrice2 = allouerMemoire(ligne2, colonne2);
+        produit = allouerMemoire(ligne1, colonne2);
 
-    for(int i = 0; i < ligne; ++i){
-        somme[i] = malloc(colonne * sizeof(**somme));
-        if(somme[i] == NULL){
-            printf("ERREUR !!!!");
+        //Traitement
+        printf("Matrice 1\n");
+        lire(matrice1, ligne1, colonne1);
+
+        printf("Matrice 2\n");
+        lire(matrice2, ligne2, colonne2);
+
+        printf("Matrice 1\n");
+        afficher(matrice1, ligne1, colonne1);
+
+        printf("Matrice 2\n");
+        afficher(matrice2, ligne2, colonne2);
+
+        printf("Le produit des deux matrices\n");
+        produitMatrices(produit, matrice1, ligne1, colonne1, matrice2, ligne2, colonne2);
+        afficher(produit, ligne1, colonne2);
+
+        //La liberation de la memoire
+        libererMemoire(matrice1, ligne1);
+        libererMemoire(matrice2, ligne2);
+        libererMemoire(produit, ligne1);
+
+        }else {
+            printf("Le produit des deux matrices n'est pas possible\n");
         }
-    }
+        break;
 
-    //Traitement
-    lire(matrice1, ligne, colonne);
-    afficher(matrice1, ligne, colonne);
+    case 3:
+        printf("Est ce que la matriced est nulle ?\n");
+        lireDimentionsMatrice(&ligne1, &colonne1);
+        //L'allocation de la memoire
+        matrice1 = allouerMemoire(ligne1, colonne1);
 
-    lire(matrice2, ligne, colonne);
-    afficher(matrice2, ligne, colonne);
+        lire(matrice1, ligne1, colonne1);
+        afficher(matrice1, ligne1, colonne1);
 
-    sommeMatrices(somme, matrice1, matrice2, ligne, colonne);
-    afficher(somme, ligne, colonne);
-
-    //La liberation de la memoire
-    for(int i = 0; i < ligne; ++i){
-        free(matrice1[i]);
-    }
-    free(matrice1);
-
-    for(int i = 0; i < ligne; ++i){
-        free(matrice2[i]);
-    }
-    free(matrice2);
-
-    for(int i = 0; i < ligne; ++i){
-        free(somme[i]);
-    }
-    free(somme);
-
+        if(nulle(matrice1, ligne1, colonne1)){
+            printf("La matrice est nulle\n");
+        }else{
+            printf("La matrice n'est pas nulle\n");
+        }
+        //La liberation de la memoire
+        libererMemoire(matrice1, ligne1);
+        break;
     
+    case 4:
+        printf("Rechercher dans une matrice\n");
+        lireDimentionsMatrice(&ligne1, &colonne1);
+        //L'allocation de la memoire
+        matrice1 = allouerMemoire(ligne1, colonne1);
 
+        lire(matrice1, ligne1, colonne1);
+        afficher(matrice1, ligne1, colonne1);
+
+        printf("Donner l'element a rechercher : ");
+        scanf("%d", &x);
+
+        int trouve = rechercher(matrice1, ligne1, colonne1, x);
+        if(trouve == -1){
+            printf("%d n'existe pas dans la matrice\n", x);
+        }
+
+        //La liberation de la memoire
+        libererMemoire(matrice1, ligne1);
+        break;
     
+    }
 
     return 0;
 }
 
-void lire(int **matrice, int ligne, int colonne){
-    printf("Donner les elements de la matrice : \n");
-    for(int i = 0; i < ligne; ++i){
-        for(int j = 0; j < colonne; ++j){
-            printf("T[%d][%d] = ", i, j);
-            scanf("%d", &matrice[i][j]);
-        }
-    }
-    printf("\n\n");
-}
-
-void afficher(int **matrice, int ligne, int colonne){
-    printf("Les elements de la matrice sont : \n");
-    for(int i = 0; i < ligne; ++i){
-        for(int j = 0; j < colonne; ++j){
-            printf("T[%d][%d] = %d\t", i, j, matrice[i][j]);
-        }
-        printf("\n");
-    }
-     printf("\n\n");
-} 
-
-void sommeMatrices(int **somme, int **matrice1, int **matrice2, int ligne, int colonne){
-    for(int i = 0; i < ligne; ++i){
-        for(int j = 0; j < colonne; ++j){
-            somme[i][j] = matrice1[i][j] + matrice2[i][j];
-        }
-        
-    }
-}
