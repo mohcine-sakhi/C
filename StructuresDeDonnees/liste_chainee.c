@@ -1,27 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-typedef struct Element Element;
-struct Element{
-    int nombre;
-    Element *suivant;
-};
-
-typedef struct Liste Liste;
-struct Liste{
-    Element *premier;
-};
-
-Liste *initialiser();
-void insertion(Liste *liste, int nb);
-void suppression(Liste *liste);
-void afficherListe(Liste *liste);
+#include "liste_chainee.h"
 
 int main(int argc, int *argv[]){
     Liste *liste = initialiser();
-    insertion(liste, (int)4);
-    insertion(liste, (int)8);
-    insertion(liste, (int)15);
+    insertion(liste, 4);
+    insertion(liste, 8);
+    insertion(liste, 15);
 
     suppression(liste);
 
@@ -65,6 +50,7 @@ void suppression(Liste *liste){
     if(liste == NULL){
         exit(EXIT_FAILURE);
     }
+    
     if(liste->premier != NULL){
         //recupeartion de l element a supprimer
         Element *aSupprimer = liste->premier;
