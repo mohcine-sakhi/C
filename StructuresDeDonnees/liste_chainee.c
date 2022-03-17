@@ -2,39 +2,132 @@
 #include <stdlib.h>
 #include "liste_chainee.h"
 
-int main(int argc, int *argv[]){
-    Liste *liste = initialisation();
-    
-    insertion(liste, 4);
-    insertion(liste, 8);
-    insertion(liste, 15);
-    insertion(liste, 20);
+Liste *initialisation(){
+    Liste *liste = (Liste*) malloc(sizeof(Liste));
+    Element *element = (Element*) malloc(sizeof(Element));
 
-    afficherListe(liste);
-    printf("Le nombre des elements de la liste est : %d\n", liste->nbElements);
+    if(liste == NULL || element == NULL){
+        exit(EXIT_FAILURE);
 
-    insertionAuMilieu(liste, 15, 10);
-    insertionAuMilieu(liste, 10, 30);
-    insertionAuMilieu(liste, 4, 1);
-    
-    printf("\nApres insertion de 10 apres 15, 30 apres 10 et 1 apres 4\n");
-    afficherListe(liste);
+    }
 
-    
-    suppression(liste);
-    printf("\nApres suppresion du premier element\n");
-    afficherListe(liste);
+    element->nombre = 0;
+    element->suivant = NULL;
+    liste->premier = element;
+    liste->nbElements = 1;
 
-    suppressionAuMilieu(liste, 10);;
-    suppressionAuMilieu(liste, 4);
-    printf("\nApres suppresion du 10 et 4\n");
-    afficherListe(liste);
-    printf("\nLe nombre des elements de la liste est : %d\n", liste->nbElements);
+    return liste;
+}
 
-    return 0;
-    
+void destruction(Liste *liste){
+    if(liste == NULL){
+        exit(EXIT_FAILURE);
+    }
+
+    Element *courant = liste->premier;
+    Element *aSupprimer = NULL;
+
+    while (courant != NULL){
+        aSupprimer = courant;
+        courant = courant->suivant;
+        printf("%d est supprime\n", aSupprimer->nombre);
+        free(aSupprimer);
+        --liste->nbElements;
+    }
+
+
 }
 
 
+void insertion(Liste *liste, int nb){
+    //creation du nouvelelement
+    Element *nouveau = (Element*) malloc(sizeof(Element));
+    if(liste == NULL || nouveau == NULL){
+        exit(EXIT_FAILURE);
+    }
+    nouveau->nombre = nb;
+    //insertion de l element au debut de la liste
+    nouveau->suivant = liste->premier;
+    liste->premier = nouveau;
+    ++liste->nbElements;
 
+}
 
+void insertionAuMilieu(Liste *liste, int precedent, int nb){
+    Element *nouveau = (Element*) malloc(sizeof(Element));
+
+    if(liste == NULL || nouveau == NULL){
+        exit(EXIT_FAILURE);
+    }
+
+    Element *courant = liste->premier;
+    while (courant != NULL){
+        if(courant->nombre == precedent){
+            nouveau->suivant = courant->suivant;
+            nouveau->nombre = nb;
+            courant->suivant = nouveau;
+            ++liste->nbElements;
+        }
+
+        courant = courant->suivant;
+    }
+}
+
+void suppression(Liste *liste){
+
+    if(liste == NULL){
+        exit(EXIT_FAILURE);
+    }
+    
+    if(liste->premier != NULL){
+        //recupeartion de l element a supprimer
+        Element *aSupprimer = liste->premier;
+
+        //suppression de l'element
+        liste->premier = aSupprimer->suivant;
+        free(aSupprimer);
+        --liste->nbElements;
+    }
+}
+
+void suppressionAuMilieu(Liste *liste, int precedent){
+
+    if(liste == NULL){
+        exit(EXIT_FAILURE);
+    }
+        
+    Element *courant = liste->premier;
+    //Au cas ou l element est au debut de la liste
+    if(courant != NULL && courant->nombre == precedent){
+        suppression(liste);
+    }else{
+        int trouve = 0;
+        Element *elementSuivant = courant->suivant;
+        while (elementSuivant != NULL && ! trouve){
+            if(elementSuivant->nombre == precedent){
+                courant->suivant = elementSuivant->suivant;
+                free(elementSuivant);
+                --liste->nbElements;
+                trouve = 1;
+            }
+            courant = elementSuivant;
+            elementSuivant = elementSuivant->suivant;
+        }
+    }
+
+}
+
+void afficherListe(Liste *liste){
+
+    if(liste == NULL){
+        exit(EXIT_FAILURE);
+    }
+
+    Element *courant = liste->premier;
+
+    while (courant != NULL){
+        printf("%d -> ", courant->nombre);
+        courant = courant->suivant;
+    }
+    printf("NULL\n");
+}
