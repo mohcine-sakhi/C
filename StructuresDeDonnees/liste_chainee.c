@@ -40,7 +40,7 @@ void destruction(Liste *liste){
 
 
 void insertion(Liste *liste, int nb){
-    //creation du nouvelelement
+    //creation du nouvel element
     Element *nouveau = (Element*) malloc(sizeof(Element));
     if(liste == NULL || nouveau == NULL){
         exit(EXIT_FAILURE);
