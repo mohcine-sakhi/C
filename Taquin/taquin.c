@@ -6,10 +6,9 @@
 void rechercheAetoile (Etat *etatInitial, Etat *etatFinal, void genereSuccesseurs(), int h(), int g()){
     Liste *listeNoeuds = initialiseListe();
     inserer(etatInitial, listeNoeuds);
-    Liste *noeudsDejaTraites = NULL; 
-    int i = 0;
+    Liste *noeudsDejaTraites = initialiseListe(); 
+    
     while(!vide(listeNoeuds)){
-        ++i;
         Etat *etatCourant = extraire(listeNoeuds);
         Liste *listeSuccesseurs = initialiseListe();
         afficheNoeud(etatCourant, LIGNE, COLONNE);
@@ -20,17 +19,13 @@ void rechercheAetoile (Etat *etatInitial, Etat *etatFinal, void genereSuccesseur
         }else{
             listeSuccesseurs = initialiseListe();
             genereSuccesseurs(etatCourant, etatFinal, listeSuccesseurs);
-            printf("pour i = %d\n", i);
-            afficheListeNoeuds(listeSuccesseurs);
-            int j = 0;
+
             while(!vide(listeSuccesseurs)){
-                ++j;
+                
                 Etat *element = extraire(listeSuccesseurs);
-                printf("pour j = %d\n", j);
-                afficheNoeud(element, LIGNE, COLONNE);
-                //if(!(appartient(element, listeNoeuds) || appartient(element, noeudsDejaTraites))){
+                if(!(appartient(element, listeNoeuds) || appartient(element, noeudsDejaTraites))){
                     inserer(element, listeNoeuds);
-                //}
+                }
             }
 
             inserer(etatCourant, noeudsDejaTraites);
@@ -165,7 +160,7 @@ int appartient(Etat *etatCourant, Liste *noeudsDejaTraites){
     }
 
     Noeud *courant = noeudsDejaTraites->premier;
-    while (courant->suivant != NULL){
+    while (courant != NULL){
         if(etatsSemblables(etatCourant, courant->etat)){
             return 1;
         }
@@ -184,6 +179,36 @@ void genereSuccesseurs(Etat *etatCourant,  Etat *etatFinal, Liste *listeSuccesse
     Position *position = (Position*) malloc(sizeof(Position));
     position = recupererPosition(etatCourant->matrice, LIGNE, COLONNE, 0);
 
+    //deplacement vers le haut
+    if(position->x > 0){
+        int **matriceCopie = allouerMemoireMatrice(LIGNE, COLONNE);
+        copieMatrice(etatCourant->matrice, matriceCopie, LIGNE, COLONNE);
+
+        matriceCopie[position->x][position->y] = matriceCopie[position->x - 1][position->y];
+        matriceCopie[position->x - 1][position->y] = 0;
+
+        Etat *etat = initialiseEtat(matriceCopie);
+        etat->cout = heuristique(etat, etatFinal);
+        etat->arc = coutArc(etatCourant);
+        etat->estimation = estimation(etat, etatFinal);
+
+        inserer(etat, listeSuccesseurs);
+    }
+    //deplacement vers le bas
+    if(position->x < COLONNE - 1){
+        int **matriceCopie = allouerMemoireMatrice(LIGNE, COLONNE);
+        copieMatrice(etatCourant->matrice, matriceCopie, LIGNE, COLONNE);
+
+        matriceCopie[position->x][position->y] = matriceCopie[position->x + 1][position->y];
+        matriceCopie[position->x + 1][position->y] = 0;
+
+        Etat *etat = initialiseEtat(matriceCopie);
+        etat->cout = heuristique(etat, etatFinal);
+        etat->arc = coutArc(etatCourant);
+        etat->estimation = estimation(etat, etatFinal);
+
+        inserer(etat, listeSuccesseurs);
+    }
     //deplacement a droite
     if(position->y < COLONNE - 1){
         int **matriceCopie = allouerMemoireMatrice(LIGNE, COLONNE);
@@ -207,36 +232,6 @@ void genereSuccesseurs(Etat *etatCourant,  Etat *etatFinal, Liste *listeSuccesse
 
         matriceCopie[position->x][position->y] = matriceCopie[position->x][position->y - 1];
         matriceCopie[position->x][position->y - 1] = 0;
-
-        Etat *etat = initialiseEtat(matriceCopie);
-        etat->cout = heuristique(etat, etatFinal);
-        etat->arc = coutArc(etatCourant);
-        etat->estimation = estimation(etat, etatFinal);
-
-        inserer(etat, listeSuccesseurs);
-    }
-    //deplacement vers le haut
-    if(position->x > 0){
-        int **matriceCopie = allouerMemoireMatrice(LIGNE, COLONNE);
-        copieMatrice(etatCourant->matrice, matriceCopie, LIGNE, COLONNE);
-
-        matriceCopie[position->x][position->y] = matriceCopie[position->x - 1][position->y];
-        matriceCopie[position->x - 1][position->y] = 0;
-
-        Etat *etat = initialiseEtat(matriceCopie);
-        etat->cout = heuristique(etat, etatFinal);
-        etat->arc = coutArc(etatCourant);
-        etat->estimation = estimation(etat, etatFinal);
-
-        inserer(etat, listeSuccesseurs);
-    }
-    //deplacement vers le bas
-    if(position->x < COLONNE - 1){
-        int **matriceCopie = allouerMemoireMatrice(LIGNE, COLONNE);
-        copieMatrice(etatCourant->matrice, matriceCopie, LIGNE, COLONNE);
-
-        matriceCopie[position->x][position->y] = matriceCopie[position->x + 1][position->y];
-        matriceCopie[position->x + 1][position->y] = 0;
 
         Etat *etat = initialiseEtat(matriceCopie);
         etat->cout = heuristique(etat, etatFinal);
